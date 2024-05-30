@@ -10,7 +10,7 @@ void login(){
  char mail[] = "doutordacarne";
  char email[14];
  
- printf("\n\t*********  TECHVET  **********");
+ printf("\n\t****  TECHVET  *****");
  
  printf("\n\t <-> LOGIN DE ACESSO: ");
  fgets(email,14,stdin);
@@ -42,7 +42,7 @@ struct Animal {
 }; 
 
 struct Tutor {
-	long id;//observar que talvez esse id choque com a função de id nos metodos de impressao de todos os dados
+	long id;//observar que talvez esse id choque com a funï¿½ï¿½o de id nos metodos de impressao de todos os dados
 	unsigned long cpf;
     char nome[50];
     int telefone;
@@ -57,12 +57,44 @@ struct Tutor {
     char cidade[20];
     char estado[20];
     char email[50];
-}; 
+};
 
-struct Animal novoAnimal[100];
-struct Tutor tutoresCadastrados[100];
-int id = 0;
-int idAnimal = 0;
+Tutor tutorMock = {
+	1,
+	123456789,
+	"Cleiton",
+	819957175,
+};
+
+Tutor tutor2Mock = {
+	2,
+	122456789,
+	"Abiel",
+	819957175,
+};
+
+Animal animalMock = {
+	1,
+	"Raquel",
+	123456789
+};
+
+Animal animal2Mock = {
+	1,
+	"Toto",
+	122456789
+};
+
+Animal animal3Mock = {
+	1,
+	"Poli",
+	122456789
+};
+
+struct Animal novoAnimal[100] = {animalMock, animal2Mock, animal3Mock};
+struct Tutor tutoresCadastrados[100] = {tutorMock, tutor2Mock};
+int id = 2;
+int idAnimal = 3;
 
 int menuTutor();
 void cadastrarTutores();
@@ -87,7 +119,7 @@ int menu(){
 	printf("\nDIGITE A OPCAO: ");
 	scanf("%d", &opcao);
 	
-	system("cls");
+	system("clear");
 	
 	switch(opcao) {
 		case 1:
@@ -115,9 +147,6 @@ int menu(){
 	return opcao;
 }
 int menuTutor(){
-	
-	printf("%ld", tutoresCadastrados[id-1].cpf);
-	
 	int opcao;
 	
 	printf("\nMENU PROPRIETARIO:");
@@ -129,7 +158,7 @@ int menuTutor(){
 	printf("\nDIGITE A OPCAO: ");
 	scanf("%d", &opcao);
 	
-	system("cls");
+	system("clear");
 	
 	switch(opcao) {
 		case 1:
@@ -206,9 +235,8 @@ void cadastrarTutores(){
     
     tutor.id = id + 1;
     id++;
-    
-    int num_elements = sizeof(tutoresCadastrados) / sizeof(tutoresCadastrados[0]);
-   	tutoresCadastrados[id -1] = tutor;
+
+   	tutoresCadastrados[id - 1] = tutor;
     
     
     printf("\nPROPRIETARIO CADASTRADO!\n");
@@ -263,17 +291,16 @@ void buscarTutores(){
 
 void imprimirTutores() {
     int i;
-    int num_elements = sizeof(tutoresCadastrados) / sizeof(tutoresCadastrados[0]);
-    printf("\nPROPRIETARIO CADASTRADO:\n");
+    printf("\nPROPRIETARIOS CADASTRADOS:\n");
     
-    for (i = 0; i < num_elements; i++) {
+    for (i = 0; i < id; i++) {
     	if(tutoresCadastrados[i].id != 0) {
     
     		printf("\nNOME DO PROPRIETARIO: %s", tutoresCadastrados[i].nome); 
     		printf("TELEFONE: %d", tutoresCadastrados[i].telefone); 
 			printf("\nSEXO: %s", tutoresCadastrados[i].sexo); 
     		printf("\nNASCIMENTO: %s", tutoresCadastrados[i].nascimento); 
-    		printf("\nCPF: %ld", tutoresCadastrados[i].id);
+    		printf("\nCPF: %ld", tutoresCadastrados[i].cpf);
 			printf("\nRG: %s", tutoresCadastrados[i].rg);
             printf("\nCEP: %s", tutoresCadastrados[i].cep);
     		printf("\nENDERECO: %s", tutoresCadastrados[i].endereco);
@@ -284,15 +311,19 @@ void imprimirTutores() {
 			printf("ESTADO: %s", tutoresCadastrados[i].estado);
     		printf("EMAIL: %s", tutoresCadastrados[i].email);
         	printf("\n-----------------------------\n");
-        	
+
+    		int possui_animais = 0;
         	for(int y = 0; y < idAnimal; y++) {        		
 	        	if(novoAnimal[y].idTutor == tutoresCadastrados[i].cpf){
+	        		possui_animais = 1;
 	        		printf("ANIMAIS DO TUTOR: %s", novoAnimal[y].nome);
 	        		printf("\n-----------------------------\n");
-				}else{
-					printf("\nNÃO POSSUI ANIMAIS CADASTRADO");
-				}	
+				}
 			}
+
+    		if(possui_animais == 0) {
+    			printf("\nNï¿½O POSSUI ANIMAIS CADASTRADO");
+    		}
 		}
     }
     menuTutor();
@@ -314,7 +345,7 @@ int menuAnimal(){
 	printf("\nDIGITE A OPCAO: ");
 	scanf("%d", &opcao);
 	
-	system("cls");
+	system("clear");
 	
 	switch(opcao) {
 		case 1:
@@ -383,8 +414,7 @@ void cadastrarAnimais() {
     idAnimal++;
     
     //int num_elements = sizeof(novoAnimal) / sizeof(novoAnimal[0]);
-    novoAnimal[idAnimal] = animal;
-    
+    novoAnimal[idAnimal - 1] = animal;
     
     printf("\nPACIENTE CADASTRADO!\n");
     menuAnimal();
@@ -430,7 +460,7 @@ void buscarAnimais() {
     		printf("\nNOME DO ANIMAL: %s", novoAnimal[y].nome);
     		printf("\nNOME DO TUTOR: %s", novoAnimal[y].nomeTutor);
 			printf("\nESPECIE: %s", novoAnimal[y].especie);
-			printf("\nRAÇA: %s", novoAnimal[y].raca);
+			printf("\nRAï¿½A: %s", novoAnimal[y].raca);
 			printf("\nPELO: %s", novoAnimal[y].pelo);
 			printf("\nCOR: %s", novoAnimal[y].cor);
 			printf("\nSEXO: %s", novoAnimal[y].sexo);
@@ -461,7 +491,7 @@ int laboratorio(){
 	printf("\nDIGITE A OPCAO: ");
 	scanf("%d", &opcao);
 	
-	system("cls");
+	system("clear");
 	
 	switch(opcao) {
 		case 1:
@@ -501,7 +531,7 @@ int estoque(){
 	printf("\nDIGITE A OPCAO: ");
 	scanf("%d", &opcao);
 	
-	system("cls");
+	system("clear");
 	
 	switch(opcao) {
 		case 1:
@@ -546,9 +576,9 @@ void cadastroproduto(){
 
 int main(int argc, char *argv[]) {
 	login();
-	system("cls");
+	system("clear");
 	printf("\n\t BEM VINDO AO SISTEMA DE  GERENCIAMENTO");
-    printf("\n\t*********  TECHVET  **********");
+    printf("\n\t****  TECHVET  *****");
     menu();
 	return 0;
 }
