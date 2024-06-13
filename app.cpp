@@ -4,24 +4,35 @@
 #include <locale.h>
 
 
-void login(){
- int pwd = 1234;
- int senha;
- char mail[] = "doutordacarne";
- char email[14];
- 
- printf("\n\t****  TECHVET  *****");
- 
- printf("\n\t <-> LOGIN DE ACESSO: ");
- fgets(email,14,stdin);
- printf ("\n\t <-> SENHA DE ACESSO: ");
- scanf("%d", &senha);
- 
- if (strcmp (mail, email)== 0 && pwd == senha){
-        printf("\n\tAcesso permitido");
-    }else{
-        printf("\n\tAcesso negado, email ou senha incorreta.");
+void login() {
+    int pwd = 1234;
+    int senha;
+    char mail[] = "doutordacarne";
+    char email[20]; 
+    int tentativas = 0; 
+
+    printf("\n\t****  TECHVET  *****");
+
+    while (tentativas < 3) {
+        printf("\n\t<-> LOGIN DE ACESSO: ");
+        fgets(email, sizeof(email), stdin);
+        strtok(email, "\n"); 
+
+        printf("\n\t<-> SENHA DE ACESSO: ");
+        scanf("%d", &senha);
+        getchar(); 
+
+        if (strcmp(mail, email) == 0 && pwd == senha) {
+            printf("\n\tAcesso permitido");
+            return;
+        } else {
+            printf("\n\tAcesso negado, email ou senha incorreta.");
+            tentativas++;
+        }
     }
+
+    printf("\n\tAcesso bloqueado. Muitas tentativas.");
+    exit(0);
 }
 
 struct Animal {
@@ -42,7 +53,7 @@ struct Animal {
 }; 
 
 struct Tutor {
-	long id; //observar que talvez esse id choque com a fun??o de id nos metodos de impressao de todos os dados
+	long id; 
 	unsigned long long cpf;
     char nome[50];
     int telefone;
@@ -159,6 +170,7 @@ void imprimirAnimais();
 void buscarAnimais();
 int menuLaboratorio();
 void cadastrarexame();
+void resultadoExame();
 
 int menu(){
 	int opcao;
@@ -195,8 +207,6 @@ int menu(){
 			printf("OPCAO INVALIDA\n");
 			menu();
 	}
-	
-	return opcao;
 }
 
 int agenda(){
@@ -239,7 +249,7 @@ bool verificaragendamento(const char* data, const char* hora, const char* veteri
         if (strcmp(consultas[r].data, data) == 0 && 
             strcmp(consultas[r].hora, hora) == 0 && 
             strcmp(consultas[r].veterinario, veterinario) == 0) {
-            printf("\nDATA E HORA EST√O OCUPADOS, ESCOLHA OUTRO HOR¡RIO OU OUTRA DATA OU OUTRO VETERIN¡RIO!\n\n");
+            printf("\nDATA E HORA EST√ÉO OCUPADOS, ESCOLHA OUTRO HOR√ÅRIO OU OUTRA DATA OU OUTRO VETERIN√ÅRIO!\n\n");
             return true;
         }
     }
@@ -281,7 +291,7 @@ void agendarconsulta() {
 }
 
 void ordenarConsultas() { 
-    struct Agenda temp; // DeclaraÁ„o da vari·vel temp
+    struct Agenda temp; // Declara√ß√£o da vari√°vel temp
     
     for (int i = 0; i < numConsulta - 1; i++) {
         for (int j = 0; j < numConsulta - i - 1; j++) {
@@ -289,7 +299,7 @@ void ordenarConsultas() {
             if (strcmp(consultas[j].data, consultas[j + 1].data) > 0 ||
                 (strcmp(consultas[j].data, consultas[j + 1].data) == 0 &&
                  strcmp(consultas[j].hora, consultas[j + 1].hora) > 0)) {
-                temp = consultas[j]; // N„o È necess·rio redeclarar temp
+                temp = consultas[j]; // N√£o √© necess√°rio redeclarar temp
                 consultas[j] = consultas[j + 1];
                 consultas[j + 1] = temp;
             }
@@ -567,6 +577,7 @@ int menuAnimal(){
 			break;
 		case 4:
 			menu();
+			break;
 		default:
 			printf("OPCAO INVALIDA\n");
 			menuAnimal();
@@ -615,7 +626,7 @@ void cadastrarAnimais() {
     printf("PESO(0.30 KG): ");
     scanf("%f", &animal.peso); 
     
-    printf("RESTRICOES: "); //tirar essa opÁ„o
+    printf("RESTRICOES: "); //tirar essa op√ß√£o
     scanf("%s", &animal.restricoes);
     
     animal.id = idAnimal + 1;
@@ -705,11 +716,11 @@ int menuLaboratorio(){
 			cadastrarexame();
 			break;
 		case 2:
-			
+			resultadoExame();
 			break;
 		case 3:
 			menu();
-			
+			break;
 		default:
 			printf("OPCAO INVALIDA\n");
 			menuLaboratorio();
@@ -724,58 +735,76 @@ void cadastrarexame(){
 	printf("\tCADASTRO DE EXAME\n\n");
 	
 	printf("NOME DO ANIMAL: ");
-	scanf("%s", exame.nome_animal);
+	scanf("%s", &exame.nome_animal);
 	
 	printf("CPF DO TUTOR: ");
-	scanf("%llu", exame.cpf_tutor);
+	scanf("%llu", &exame.cpf_tutor);
+	
+	printf("MEDICO VETERINARIO: ");
+	scanf("%s", &exame.medico);
 	
 	printf("DATA: ");
-	scanf("%s", exame.data);
+	scanf("%s", &exame.data);
 	
-	printf("SITUA«√O: ");
-	scanf("%s", exame.situacao);
+	printf("SITUACAO: ");
+	scanf("%s", &exame.situacao);
 	
-	printf("HEM¡CIAS(x10/mm6): ");
-	scanf("%f", exame.hemacias);
+	printf("HEMACIAS(x10/mm6): ");
+	scanf("%f", &exame.hemacias);
 	
 	printf("VOLUME GLOBULAR(%): ");
-	scanf("%f", exame.globular);
+	scanf("%f", &exame.globular);
 	
-	printf("PLAQUETAS(MILHARES/MM≥): ");
-	scanf("%lu", exame.plaquetas);
+	printf("PLAQUETAS(MILHARES/MM¬≥): ");
+	scanf("%lu", &exame.plaquetas);
 	
-	printf("PROTEÕNA PLASM¡TICA TOTAL (G/DL): ");
-	scanf("%f", exame.proteina);
+	printf("PROTEINA PLASMATICA TOTAL (G/DL): ");
+	scanf("%f", &exame.proteina);
 	
 	printf("LEUCOMETRIA: ");
-	scanf("%lu", exame.leucometria);
+	scanf("%lu", &exame.leucometria);
 	
 	printf("BASTONETES: ");
-	scanf("%f", exame.bastonetes);
+	scanf("%f", &exame.bastonetes);
 	
 	printf("SEGMENTADOS: ");
-	scanf("%f", exame.segmentos);
+	scanf("%f", &exame.segmentos);
 	
 	printf("LINFOCITOS: ");
-	scanf("%f", exame.linfocitos);
+	scanf("%f", &exame.linfocitos);
 
 	printf("EOSINOFILOS: ");
-	scanf("%f", exame.eosinofilos);
+	scanf("%f", &exame.eosinofilos);
 	
 	printf("BASOFILOS: ");
-	scanf("%f", exame.basofilos);
+	scanf("%f", &exame.basofilos);
 
 	printf("MONOCITOS: ");
-	scanf("%f", exame.monocitos);
+	scanf("%f", &exame.monocitos);
 	
 	printf("MIELOCITOS: ");
-	scanf("%f", exame.mielocitos);
+	scanf("%f", &exame.mielocitos);
 	
-	printf("METAMIEL”CITOS: ");
-	scanf("%f", exame.metamielocitos);
+	printf("METAMIELOCITOS: ");
+	scanf("%f", &exame.metamielocitos);
 	
-	printf("CADASTRO CONCLUÕDO!");
-
+	printf("OBS: ");
+	scanf("%s", &exame.obs);
+	
+	printf("CADASTRO CONCLUIDO!");
+	
+	exame.plaquetas = exame.plaquetas*1500;
+	
+	exame.leucometria = (exame.leucometria*21*10)/4;
+	
+	exame.hemoglobina = exame.globular/3;
+	
+	exame.vgm = (exame.globular*10)/exame.hemacias;
+	
+	exame.chgm = (exame.hemoglobina*100)/exame.globular;
+	
+	
+	
 	exame.id_exame = id_exame + 1;
     id_exame++;
     
@@ -785,42 +814,80 @@ void cadastrarexame(){
     menuLaboratorio();
 }
 
-void resultadoExame(){
-	/*printf("====================================================================\n");
-    printf("|              CLÕNICA VETERIN¡RIA CARNEVET                         |\n");
-    printf("|                 AV. CARNE LEITAO, N™001                   |\n");
-    printf("|                    (81) 1112-0000                                     |\n");
+void resultadoExame() {
+    char buscaranimal[50];
+    unsigned long long buscarcpf_tutor;
+
+    printf("\nRESULTADO DE EXAME\n");
+    printf("\nDIGITE O NOME DO ANIMAL: ");
+    scanf("%s", buscaranimal);  
+
+    printf("\nDIGITE O CPF DO PROPRIETARIO: \n");
+    scanf("%llu", &buscarcpf_tutor);
+
+    bool found = false;
+
+
+    for (int q = 0; q < id_exame; q++) {
+        if (strcmp(novoExame[q].nome_animal, buscaranimal) == 0 && novoExame[q].cpf_tutor == buscarcpf_tutor) {
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("RESULTADO NAO ESTA DISPONIVEL / NAO TEM RESULTADO NA BASE DE DADOS\n");
+        return;
+    }
+
     printf("====================================================================\n");
-    printf("| ANIMAL: %s                               ESP…CIE: %s                                  |\n");
-    printf("| SEXO: %s                                 RA«A: %s                                     |\n");
-    printf("| M…D. VET.: %s                            DATA: %s                                     |\n");
-    printf("| TUTOR: %s                                SITUA«√O: %s                                 |\n");
+    printf("|              CLINICA VETERINARIA CARNEVET                         |\n");
+    printf("|                 AV. CARNE LEITAO, N¬™001                           |\n");
+    printf("|                    (81) 1112-0000                                 |\n");
     printf("====================================================================\n");
-    printf("|                           HEMATIMETRIA           |   VALORES DE REFER NCIA |\n");
-    printf("| Hem·cias (x10/mm6)                   4,83        |     6,0 a 7,0           |\n");
-    printf("| Volume Globular (%)                 32           |     40 a 47             |\n");
-    printf("| Hemoglobina (g/dL)                  10,67        |     14 a 17             |\n");
-    printf("| VGM (fl)                            66,25        |     65 a 78             |\n");
-    printf("| CHGM (%)                            33,33        |     30 a 35             |\n");
-    printf("| Plaquetas (milhares / mm≥)         156000        |     200000 a 500000     |\n");
-    printf("| ProteÌna Plasm·tica Total (g/dL)     7,2         |     5,0 a 7,0           |\n");
-    printf("====================================================================\n");
-    printf("| LEUCOMETRIA                 5198          |     8000 a 16000     |\n");
-    printf("====================================================================\n");
-    printf("|       Relativo (%)     |    Absoluto     |    Relativo (%)     |     Absoluto       |\n");
-    printf("| Bastonetes      %f%    |       0         |     0 a 1           |     0 a 160        |\n");
-    printf("| Segmentados     %f%    |     3742        |     55 a 70         |  3760 a 11040      |\n");
-    printf("| LinfÛcitos      %f%    |      572        |     20 a 40         |  2240 a 7200       |\n");
-    printf("| EosinÛfilos     %f%    |      416        |     1 a 6           |     80 a 800       |\n");
-    printf("| BasÛfilos       %f%    |       0         |     RAROS           |     RAROS          |\n");
-    printf("| MonÛcitos       %f%    |      468        |     2 a 8           |  160 a 1600        |\n");
-    printf("| MielÛcitos      %f%    |       0         |     0               |     0              |\n");
-    printf("| MetamielÛcitos  %f%    |       0         |     0               |     0              |\n");
-    printf("====================================================================\n");
-    printf("OBS: ANEMIA NORMOCITICA HIPOCROMICA, TROMBOCITOPENIA, HIPERPROTEINEMIA, LEUCOPENIA,\n");
-    printf("NEUTROPENIA, LINFOCITOPENIA, EOSINOFILIA RELATIVA, MONOCITOSE RELATIVA.\n");
-    printf("====================================================================\n");*/
+
+
+    for (int r = 0; r < idAnimal; r++) {
+        if (novoAnimal[r].idTutor == buscarcpf_tutor && strcmp(novoAnimal[r].nome, buscaranimal) == 0) {
+            printf("| ANIMAL: %s ESPECIE: %s |\n", novoAnimal[r].nome, novoAnimal[r].especie);
+            printf("| SEXO: %s RACA: %s |\n", novoAnimal[r].sexo, novoAnimal[r].raca);
+            printf("| TUTOR: %s |\n", novoAnimal[r].nomeTutor);
+        }
+    }
+
+
+    for (int a = 0; a < id_exame; a++) {
+        if (strcmp(novoExame[a].nome_animal, buscaranimal) == 0 && novoExame[a].cpf_tutor == buscarcpf_tutor) {
+            printf("| MED. VET.: %s DATA: %s SITUACAO: %s |\n", novoExame[a].medico, novoExame[a].data, novoExame[a].situacao);
+            printf("====================================================================\n");
+            printf("|                           HEMATIMETRIA           |   VALORES DE REFERENCIA |\n");
+            printf("| HEMACIAS (x10/mm6)                   %.1f        |     6.0 a 7.0           |\n", novoExame[a].hemacias);
+            printf("| VOLUME GLOBULAR (%)                  %.1f        |     40 a 47             |\n", novoExame[a].globular);
+            printf("| HEMOGLOBINA (g/dL)                   %.1f        |     14 a 17             |\n", novoExame[a].hemoglobina);
+            printf("| VGM (fl)                             %.1f        |     65 a 78             |\n", novoExame[a].vgm);
+            printf("| CHGM (%)                             %.1f        |     30 a 35             |\n", novoExame[a].chgm);
+            printf("| PLAQUETAS (milhares / mm¬≥)           %ld         |     200000 a 500000     |\n", novoExame[a].plaquetas);
+            printf("| PROTEINA PLASMATICA Total (g/dL)     %.1f        |     5.0 a 7.0           |\n", novoExame[a].proteina);
+            printf("| LEUCOMETRIA                          %ld         |     8000 a 16000        |\n", novoExame[a].leucometria);
+            printf("==============================================================================\n");
+            printf("|      Relativo (%)         |    Absoluto     |    Relativo (%)     |     Absoluto       |\n");
+            printf("| BASTONETES      %.1f%%     |       0         |     0 a 1           |     0 a 160        |\n", novoExame[a].bastonetes);
+            printf("| SEGMENTADOS     %.1f%%     |     3742        |     55 a 70         |  3760 a 11040      |\n", novoExame[a].segmentos);
+            printf("| LINFOCITOS      %.1f%%     |      572        |     20 a 40         |  2240 a 7200       |\n", novoExame[a].linfocitos);
+            printf("| EOSINOFILOS     %.1f%%     |      416        |     1 a 6           |     80 a 800       |\n", novoExame[a].eosinofilos);
+            printf("| BASOFILOS       %.1f%%     |       0         |     RAROS           |     RAROS          |\n", novoExame[a].basofilos);
+            printf("| MONOCITOS       %.1f%%     |      468        |     2 a 8           |  160 a 1600        |\n", novoExame[a].monocitos);
+            printf("| MIELOCITOS      %.1f%%     |       0         |     0               |     0              |\n", novoExame[a].mielocitos);
+            printf("| METAMIELOCITOS  %.1f%%     |       0         |     0               |     0              |\n", novoExame[a].metamielocitos);
+            printf("====================================================================\n");
+            printf("| OBSERVACOES: %s\n", novoExame[a].obs);
+            printf("====================================================================\n");
+        }
+    }
+
+    menuLaboratorio();
 }
+
 typedef struct {
     char nomedoproduto[50];
     char grupo[30];
@@ -852,7 +919,7 @@ int menuestoque(){
 			break;
 		case 3:
 			menu();
-			
+			break;
 		default:
 			printf("OPCAO INVALIDA\n");
 			menuestoque();
@@ -866,7 +933,7 @@ void cadastroproduto(){
        
 	Produto novoproduto;
     
-    printf("CADASTRO DE ANIMAIS:\n");
+    printf("CADASTRO DE PRODUTO:\n");
     
     printf("\nNOME DO PRODUTO: ");
     scanf("%s", &novoproduto.nomedoproduto);  
