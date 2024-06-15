@@ -105,6 +105,14 @@ struct Laboratorio {
     char obs[500];
 };
 
+struct produto{
+	int id_estoque;
+    char nomedoproduto[50];
+    char grupo[50];
+    float valor;
+    int qtdestoque;
+};
+
 Tutor tutorMock = {
 	1,
 	123456789,
@@ -148,11 +156,13 @@ struct Agenda consultas[100];
 struct Animal novoAnimal[100] = {animalMock, animal2Mock, animal3Mock};
 struct Tutor tutoresCadastrados[100] = {tutorMock, tutor2Mock, tutor3Mock};
 struct Laboratorio novoExame[100];
+struct produto novoProduto[100];
 
 int numConsulta = 0;
 int id = 3;
 int idAnimal = 3;
 int id_exame = 0;
+int id_estoque = 0;
 
 int agenda();
 bool verificaragendamento(const char* data, const char* hora, const char* veterinario);
@@ -171,6 +181,10 @@ void buscarAnimais();
 int menuLaboratorio();
 void cadastrarexame();
 void resultadoExame();
+int menuestoque();
+void cadastraproduto();
+void listaProdutos();
+void atualizarestoque();
 
 int menu(){
 	int opcao;
@@ -180,7 +194,8 @@ int menu(){
 	printf("\n[2] - PROPRIETARIO");
 	printf("\n[3] - ANIMAIS");
 	printf("\n[4] - LABORATORIO");
-	printf("\n[5] - SAIR");
+	printf("\n[5] - ESTOQUE");
+	printf("\n[6] - SAIR");
 	
 	printf("\nDIGITE A OPCAO: ");
 	scanf("%d", &opcao);
@@ -201,6 +216,9 @@ int menu(){
 			menuLaboratorio();
 			break;
 		case 5:
+			menuestoque();
+			break;
+		case 6:
 			printf("ENCERRANDO PROGRAMA!!!");
 			break;
 		default:
@@ -291,15 +309,15 @@ void agendarconsulta() {
 }
 
 void ordenarConsultas() { 
-    struct Agenda temp; // Declaração da variável temp
+    struct Agenda temp; 
     
     for (int i = 0; i < numConsulta - 1; i++) {
         for (int j = 0; j < numConsulta - i - 1; j++) {
-            // Compara as datas
+            
             if (strcmp(consultas[j].data, consultas[j + 1].data) > 0 ||
                 (strcmp(consultas[j].data, consultas[j + 1].data) == 0 &&
                  strcmp(consultas[j].hora, consultas[j + 1].hora) > 0)) {
-                temp = consultas[j]; // Não é necessário redeclarar temp
+                temp = consultas[j]; 
                 consultas[j] = consultas[j + 1];
                 consultas[j + 1] = temp;
             }
@@ -478,12 +496,12 @@ void buscarTutores(){
 			printf("\nRG: %s", tutoresCadastrados[x].rg);
             printf("\nCEP: %s", tutoresCadastrados[x].cep);
     		printf("\nENDERECO: %s", tutoresCadastrados[x].endereco);
-    		printf("NUMERO: %d", tutoresCadastrados[x].numero);
-    		printf("BAIRRO: %s", tutoresCadastrados[x].bairro); 
-    		printf("COMPLEMENTO: %s", tutoresCadastrados[x].complemento); 
-			printf("CIDADE: %s", tutoresCadastrados[x].cidade);
-			printf("ESTADO: %s", tutoresCadastrados[x].estado);
-    		printf("EMAIL: %s", tutoresCadastrados[x].email);
+    		printf("\nNUMERO: %d", tutoresCadastrados[x].numero);
+    		printf("\nBAIRRO: %s", tutoresCadastrados[x].bairro); 
+    		printf("\nCOMPLEMENTO: %s", tutoresCadastrados[x].complemento); 
+			printf("\nCIDADE: %s", tutoresCadastrados[x].cidade);
+			printf("\nESTADO: %s", tutoresCadastrados[x].estado);
+    		printf("\nEMAIL: %s", tutoresCadastrados[x].email);
     	
         	printf("\n-----------------------------\n");
 
@@ -492,12 +510,13 @@ void buscarTutores(){
 	        	if(novoAnimal[y].idTutor == tutoresCadastrados[x].cpf){
 	        		possui_animais = 1;
 	        		printf("ANIMAIS DO TUTOR: %s", novoAnimal[y].nome);
-	        		printf("\n-----------------------------\n");
+	        		printf("\n-----------------------------");
 				}
 			}
 
     		if(possui_animais == 0) {
     			printf("\nNAO POSSUI ANIMAIS CADASTRADO");
+    			printf("\n-----------------------------\n");
     		}
     		
 		} 
@@ -527,9 +546,9 @@ void imprimirTutores() {
     		printf("\nNUMERO: %d", tutoresCadastrados[i].numero);
     		printf("\nBAIRRO: %s", tutoresCadastrados[i].bairro); 
     		printf("\nCOMPLEMENTO: %s", tutoresCadastrados[i].complemento); 
-			printf("CIDADE: %s", tutoresCadastrados[i].cidade);
-			printf("ESTADO: %s", tutoresCadastrados[i].estado);
-    		printf("EMAIL: %s", tutoresCadastrados[i].email);
+			printf("\nCIDADE: %s", tutoresCadastrados[i].cidade);
+			printf("\nESTADO: %s", tutoresCadastrados[i].estado);
+    		printf("\nEMAIL: %s", tutoresCadastrados[i].email);
         	printf("\n-----------------------------\n");
 
     		int possui_animais = 0;
@@ -537,7 +556,7 @@ void imprimirTutores() {
 	        	if(novoAnimal[y].idTutor == tutoresCadastrados[i].cpf){
 	        		possui_animais = 1;
 	        		printf("ANIMAIS DO TUTOR: %s", novoAnimal[y].nome);
-	        		printf("\n-----------------------------\n");
+	        		printf("\n-----------------------------");
 				}
 			}
 
@@ -626,7 +645,7 @@ void cadastrarAnimais() {
     printf("PESO(0.30 KG): ");
     scanf("%f", &animal.peso); 
     
-    printf("RESTRICOES: "); //tirar essa opção
+    printf("RESTRICOES: "); 
     scanf("%s", &animal.restricoes);
     
     animal.id = idAnimal + 1;
@@ -888,13 +907,6 @@ void resultadoExame() {
     menuLaboratorio();
 }
 
-typedef struct {
-    char nomedoproduto[50];
-    char grupo[30];
-    float valor;
-    int qtdestoque;
-} Produto;
-
 int menuestoque(){
 
 
@@ -903,7 +915,8 @@ int menuestoque(){
 	printf("\nMENU ESTOQUE:");
 	printf("\n[1] - CADASTRAR PRODUTO");
 	printf("\n[2] - LISTA PRODUTOS");
-	printf("\n[3] - VOLTAR");
+	printf("\n[3] - ATUALIZAR ESTOQUE");
+	printf("\n[4] - VOLTAR");
 
 	printf("\nDIGITE A OPCAO: ");
 	scanf("%d", &opcao);
@@ -912,14 +925,17 @@ int menuestoque(){
 	
 	switch(opcao) {
 		case 1:
-			//cadastraproduto();
+			cadastraproduto();
 			break;
 		case 2:
-			
+			listaProdutos();
 			break;
 		case 3:
-			menu();
+			atualizarestoque();
 			break;
+		case 4:
+			menu();
+			break;	
 		default:
 			printf("OPCAO INVALIDA\n");
 			menuestoque();
@@ -929,27 +945,97 @@ int menuestoque(){
 }	
 
 
-void cadastroproduto(){
-       
-	Produto novoproduto;
-    
-    printf("CADASTRO DE PRODUTO:\n");
-    
-    printf("\nNOME DO PRODUTO: ");
-    scanf("%s", &novoproduto.nomedoproduto);  
-    
-    printf("\nGRUPO: ");
-    scanf("%s", &novoproduto.grupo); 
-    
-    printf("\nVALOR: ");
-    scanf("%f", &novoproduto.valor); 
-    
-    printf("\nQtd. ESTOQUE: ");
-    scanf("%d", &novoproduto.qtdestoque); 
-    
-    
-    printf("\nPRODUTO CADASTRADO!\n");
+void cadastraproduto() {
+    if (id_estoque < 100) {
+        struct produto produto;
+
+        printf("CADASTRO DE PRODUTO:\n");
+
+        printf("\nNOME DO PRODUTO: ");
+        fflush(stdin); 
+        fgets(produto.nomedoproduto, sizeof(produto.nomedoproduto), stdin);
+        produto.nomedoproduto[strcspn(produto.nomedoproduto, "\n")] = '\0'; 
+
+        printf("\nGRUPO: ");
+        fflush(stdin);
+        fgets(produto.grupo, sizeof(produto.grupo), stdin);
+        produto.grupo[strcspn(produto.grupo, "\n")] = '\0';
+
+        printf("\nVALOR R$: ");
+        scanf("%f", &produto.valor);
+
+        printf("\nQTD. ESTOQUE: ");
+        scanf("%d", &produto.qtdestoque);
+
+        printf("\nPRODUTO CADASTRADO!\n");
+
+        produto.id_estoque = id_estoque + 1;
+        novoProduto[id_estoque] = produto;
+        id_estoque++;
+    } else {
+        printf("ESTOQUE CHEIO! NÃO É POSSÍVEL CADASTRAR MAIS PRODUTOS.\n");
+    }
+    menuestoque();
 }
+
+void listaProdutos() {
+    if (id_estoque == 0) {
+        printf("NENHUM PRODUTO CADASTRADO.\n");
+        return;
+    }
+
+    for (int i = 0; i < id_estoque; i++) {
+        printf("PRODUTO %d:\n", i + 1);
+        printf("NOME: %s\n", novoProduto[i].nomedoproduto);
+        printf("GRUPO: %s\n", novoProduto[i].grupo);
+        printf("VALOR: R$ %.2f\n", novoProduto[i].valor);
+        printf("QTD. ESTOQUE: %d\n", novoProduto[i].qtdestoque);
+        printf("\n");
+    }
+    menuestoque();
+}
+
+void limparBufferEntrada() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {}
+}
+
+void atualizarestoque() {
+    char nomeProduto[100];  
+    int novaQuantidade;
+    char input[100]; 
+    
+    printf("ATUALIZAR ESTOQUE:\n");
+    
+    printf("DIGITE O NOME DO PRODUTO: ");
+    limparBufferEntrada();
+    fgets(input, sizeof(input), stdin);
+    input[strcspn(input, "\n")] = '\0'; 
+    strncpy(nomeProduto, input, sizeof(nomeProduto)); 
+    
+    int encontrado = 0;
+    for (int i = 0; i < id_estoque; i++) {
+        if (strcmp(novoProduto[i].nomedoproduto, nomeProduto) == 0) {
+            printf("DIGITE A NOVA QUANTIDADE: ");
+            fgets(input, sizeof(input), stdin);
+            if (sscanf(input, "%d", &novaQuantidade) == 1) {
+                novoProduto[i].qtdestoque = novaQuantidade;
+                printf("ESTOQUE ATUALIZADO PARA O PRODUTO: %s\n", novoProduto[i].nomedoproduto);
+                encontrado = 1;
+            } else {
+                printf("ENTRADA INVÁLIDA PARA QUANTIDADE.\n");
+            }
+            break;
+        }
+    }
+    
+    if (!encontrado) {
+        printf("PRODUTO NAO ENCONTRADO.\n");
+    }
+    
+    menuestoque(); 
+}
+
 
 int main(int argc, char *argv[]) {
 	login();
@@ -960,4 +1046,4 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
-//
+
