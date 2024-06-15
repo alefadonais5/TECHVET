@@ -9,11 +9,8 @@ O **TechVet** é um sistema de gerenciamento desenvolvido para clínicas veterin
 - [Descrição](#descrição)
 - [Funcionalidades](#funcionalidades)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Instalação](#instalação)
-- [Uso](#uso)
 - [Contribuidores](#contribuidores)
 - [Orientador](#orientador)
-- [Licença](#licença)
 
 ## Funcionalidades
 
@@ -32,8 +29,16 @@ O **TechVet** é um sistema de gerenciamento desenvolvido para clínicas veterin
 - **Linguagem de Programação:** C
 - **Metodologias:** Design Centrado no Usuário (DCU), Design Thinking
 
-## Instalação
+## Contribuidores
+Abiel Andrade 
+Alef Adonais 
+Ana Maria 
+Flávio Gabriel 
+José Antonio 
+João Lucas 
 
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/seu-usuario/techvet.git
+## Orientador
+Prof(a). David Geracino Soares da Cruz, ETE Senador Wilson Campos
+Adeilson Vanderley da Paz, ETE Senador Wilson Campos 
+Cleiton Melo, ETE Senador Wilson Campos
+
