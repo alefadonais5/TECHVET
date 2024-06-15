@@ -30,15 +30,15 @@ O **TechVet** é um sistema de gerenciamento desenvolvido para clínicas veterin
 - **Metodologias:** Design Centrado no Usuário (DCU), Design Thinking
 
 ## Contribuidores
-Abiel Andrade 
-Alef Adonais 
-Ana Maria 
-Flávio Gabriel 
-José Antonio 
-João Lucas 
+Abiel Andrade, 
+Alef Adonais,
+Ana Maria, 
+Flávio Gabriel,
+José Antonio, 
+João Lucas, 
 
 ## Orientador
-Prof(a). David Geracino Soares da Cruz, ETE Senador Wilson Campos
-Adeilson Vanderley da Paz, ETE Senador Wilson Campos 
-Cleiton Melo, ETE Senador Wilson Campos
+Prof(a). David Geracino Soares da Cruz - ETE Senador Wilson Campos,
+Adeilson Vanderley da Paz -ETE Senador Wilson Campos, 
+Cleiton Melo - ETE Senador Wilson Campos.
 
